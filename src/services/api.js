@@ -44,6 +44,52 @@ export const authService = {
   },
 };
 
+// User services
+export const userService = {
+  getUserByUsername: async (username) => {
+    try {
+      const response = await api.get(`/users/${username}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateProfile: async (userData) => {
+    try {
+      const response = await api.put('/users/profile', userData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updatePost: async (postId, formData) => {
+    try {
+      const response = await api.put(`/posts/${postId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deletePost: async (postId) => {
+    try {
+      await api.delete(`/posts/${postId}`);
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
 // Post services
 export const postService = {
   getPosts: async () => {
