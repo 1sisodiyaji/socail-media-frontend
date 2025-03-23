@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+html{
+    scroll-behavior: smooth;
+}
+/* scrollabse hide */
+::-webkit-scrollbar{
+    display: none;
+}
+
+
