@@ -17,8 +17,8 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         setIsLoading(true);
-        const userData = await userService.getUserByUsername(username);
-        setUser(userData);
+        const userData = await userService.getMyProfile(username);
+        setUser(userData.user);
         setPosts(userData.posts || []);
       } catch (error) {
         console.error('Error fetching user data:', error);

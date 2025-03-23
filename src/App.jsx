@@ -1,48 +1,80 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
-import Register from './pages/Register';
+import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, Outlet } from 'react-router-dom';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Feed from './pages/Feed';
 import Profile from './pages/Profile';
-import CreatePost from './pages/CreatePost';
+import SinglePostView from './pages/SinglePostView';
+import EditProfile from './pages/EditProfile';
+import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute';
+import ErrorBoundary from './components/ErrorBoundary';
+import LoadingSpinner from './components/LoadingSpinner';
 
-const App = () => {
-  const token = localStorage.getItem('token');
-  const isAuthenticated = token ? true : false;
-
+const AppLayout = () => {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route
-            path="/"
-            element={isAuthenticated ? <Feed /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/login"
-            element={!isAuthenticated ? <Login /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/register"
-            element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/create"
-            element={isAuthenticated ? <CreatePost /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/profile"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/profile/:username"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
-          />
-        </Routes>
-      </Layout>
-    </Router>
+    <div className="min-h-screen bg-zinc-950">
+      <Navbar />
+      <main className="pt-16">
+        <Outlet />
+      </main>
+    </div>
   );
 };
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route errorElement={<ErrorBoundary />}>
+      <Route 
+        path="/login" 
+        element={<Login />}
+        errorElement={<ErrorBoundary />}
+      />
+      <Route 
+        path="/register" 
+        element={<Register />}
+        errorElement={<ErrorBoundary />}
+      />
+      <Route 
+        element={<PrivateRoute />}
+        errorElement={<ErrorBoundary />}
+      >
+        <Route element={<AppLayout />}>
+          <Route 
+            path="/" 
+            element={<Feed />}
+            errorElement={<ErrorBoundary />}
+          />
+          <Route 
+            path="/profile/:userId" 
+            element={<Profile />}
+            errorElement={<ErrorBoundary />}
+          />
+          <Route 
+            path="/profile/edit" 
+            element={<EditProfile />}
+            errorElement={<ErrorBoundary />}
+          />
+          <Route 
+            path="/post/:id" 
+            element={<SinglePostView />}
+            errorElement={<ErrorBoundary />}
+          />
+        </Route>
+      </Route>
+      <Route path="*" element={<ErrorBoundary />} />
+    </Route>
+  ),
+  {
+    future: {
+      v7_startTransition: true
+    }
+  }
+);
+
+function App() {
+  return (
+    <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
+  );
+}
 
 export default App;

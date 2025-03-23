@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { authService } from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -27,7 +27,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await authService.login(formData.email, formData.password);
+      const response = await authService.login(formData.username, formData.password);
       toast.success('Login successful!', {
         style: {
           background: '#1F2937',
@@ -67,7 +67,6 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 bg-red-500/10 mix-blend-multiply" />
       
-      <Toaster position="top-center" reverseOrder={false} />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -101,15 +100,15 @@ const Login = () => {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-300">
-                Email
+              Username
               </label>
               <input
-                type="email"
-                name="email"
+                type="text"
+                name="username"
                 required
                 className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
-                placeholder="Enter your email"
-                value={formData.email}
+                placeholder="Enter your username"
+                value={formData.username}
                 onChange={handleChange}
               />
             </div>
@@ -123,7 +122,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   required
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 "
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleChange}
@@ -131,7 +130,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-300 transition-colors"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
                 >
                   {showPassword ? (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -152,7 +151,7 @@ const Login = () => {
               disabled={loading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`w-full py-3 px-4 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white rounded-lg font-medium transition-all duration-200 shadow-lg shadow-red-900/30 hover:shadow-red-900/50 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full py-3 px-4 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white rounded-lg font-medium transition-all duration-200 shadow-lg shadow-red-900/30 hover:shadow-red-900/50 ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               {loading ? (
                 <div className="flex items-center justify-center">

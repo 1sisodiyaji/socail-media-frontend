@@ -3,7 +3,8 @@
 html{
     scroll-behavior: smooth;
 }
-/* scrollabse hide */
+
+/* hid scrollabr  */
 ::-webkit-scrollbar{
     display: none;
 }
